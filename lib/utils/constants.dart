@@ -1,5 +1,5 @@
 // API Constant
-const String baseAPIURL = 'http://localhost/nso_flutter_api/public/api/';
+const String baseAPIURL = 'http://localhost:8080/nso_flutter_api/public/api/';
 
 // System App name
 const String app_name = 'MiniStock';

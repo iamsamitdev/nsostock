@@ -16,7 +16,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   // ฟังก์ชันเมื่อแสดง slide ถึงหน้าสุดท้าย
   void _onIntroEnd(context) {
     // Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
-    Navigator.pushNamed(context, '/login');
+    Navigator.pushReplacementNamed(context, '/login');
   }
 
   // สร้างฟังก์ชันเก็บ path รูป

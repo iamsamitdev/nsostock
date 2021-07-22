@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:nsostock/services/rest_api.dart';
 
 class LoginScreen extends StatefulWidget {
   LoginScreen({Key? key}) : super(key: key);
@@ -61,6 +64,16 @@ class _LoginScreenState extends State<LoginScreen> {
                                   hintStyle: TextStyle(fontSize: 18, color: Colors.black),
                                   errorStyle: TextStyle(fontSize: 18, color: Colors.red),
                                 ),
+                                validator: (value){
+                                  if(value!.isEmpty){
+                                    return 'กรุณาป้อนชื่อผู้ใช้ก่อน';
+                                  }else{
+                                    return null;
+                                  }
+                                },
+                                onSaved: (value){
+                                  _username = value!.trim();
+                                },
                               ),
                               TextFormField(
                                 autofocus: false,
@@ -74,10 +87,46 @@ class _LoginScreenState extends State<LoginScreen> {
                                   hintStyle: TextStyle(fontSize: 18, color: Colors.black),
                                   errorStyle: TextStyle(fontSize: 18, color: Colors.red),
                                 ),
+                                validator: (value){
+                                  if(value!.isEmpty){
+                                    return 'กรุณาป้อนรหัสผ่านก่อน';
+                                  }else{
+                                    return null;
+                                  }
+                                },
+                                onSaved: (value){
+                                  _password = value!.trim();
+                                },
                               ),
                               SizedBox(height: 24,),
                               ElevatedButton(
-                                onPressed: (){},
+                                onPressed: () async {
+
+                                  if(formKey.currentState!.validate()){
+                                    formKey.currentState!.save();
+                                  }
+
+                                  // print(_username! + _password!);
+
+                                  // เรียกใช้ LoginAPI
+                                  var response = await CallAPI().loginAPI(
+                                    {
+                                      "username": _username,
+                                      "password": _password
+                                    }
+                                  );
+
+                                  var body = json.decode(response.body);
+
+                                  print(body);
+                                  if(body['status'] == 'success'){
+                                    // ส่งไปหน้า dashboard
+                                    Navigator.pushReplacementNamed(context, '/dashboard');
+                                  }else{
+                                    print('Login fail!');
+                                  }
+                                  
+                                },
                                 child: Padding(
                                   padding: EdgeInsets.symmetric(horizontal: 70, vertical: 10),
                                   child: Text(
