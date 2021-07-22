@@ -4,7 +4,8 @@ import 'package:nsostock/screens/bottomnavmenu/home/home_screen.dart';
 import 'package:nsostock/screens/bottomnavmenu/notification/notification_screen.dart';
 import 'package:nsostock/screens/bottomnavmenu/report/report_screen.dart';
 import 'package:nsostock/screens/bottomnavmenu/setting/setting_screen.dart';
-import 'package:nsostock/utils/constants.dart'; // fim
+import 'package:nsostock/utils/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart'; // fim
 
 // statefulW
 class DashboardScreen extends StatefulWidget {
@@ -15,6 +16,21 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+
+  // สร้างตัวแปรไว้เก็บ fullname, username  และ imgProfile
+  String? _fullname, _username, _imgProfile;
+
+  // สร้าง Object แบบ Sharedpreferences
+  SharedPreferences? sharedPreferences;
+
+  getProfile() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    setState(() {
+      _fullname = sharedPreferences!.getString('storeFullname');
+      _username = sharedPreferences!.getString('storeUsername');
+      _imgProfile = sharedPreferences!.getString('storeImgProfile');
+    });
+  }
 
   // สร้างตัวแปรไว้เก็บ list รายการของ tab bottomNavigation และ App Bar
   int _currentIndex = 0;
@@ -54,6 +70,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   @override
+  void initState() { 
+    super.initState();
+    getProfile();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold( // fscaff
       appBar: AppBar(
@@ -86,6 +108,49 @@ class _DashboardScreenState extends State<DashboardScreen> {
             label: account_title
           ),
         ],
+      ),
+      drawer: Drawer(
+        child: ListView(
+          children: [
+            UserAccountsDrawerHeader(
+              accountName: Text('$_fullname'), 
+              accountEmail: Text('$_username'),
+              currentAccountPicture: _imgProfile != null ? CircleAvatar(
+                backgroundImage:  NetworkImage('http://localhost:8080/nso_flutter_api/public/images/profile/$_imgProfile')
+              ) : CircleAvatar(
+                backgroundImage: AssetImage('assets/images/avatar.jpg'),
+              ),
+            ),
+            ListTile(
+              leading: Icon(Icons.info_outline),
+              title: Text(about_menu_text),
+              onTap: (){
+                Navigator.pushNamed(context, '/about');
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.book_online),
+              title: Text(term_menu_text),
+              onTap: (){
+                Navigator.pushNamed(context, '/termpolicy');
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.email),
+              title: Text(contact_menu_text),
+              onTap: (){
+                Navigator.pushNamed(context, '/contact');
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.exit_to_app),
+              title: Text(signout_menu_text),
+              onTap: (){
+                Navigator.pushNamed(context, '/login');
+              },
+            )
+          ],
+        ),
       ),
     );
   }

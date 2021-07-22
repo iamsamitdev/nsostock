@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:nsostock/services/rest_api.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   LoginScreen({Key? key}) : super(key: key);
@@ -120,6 +121,16 @@ class _LoginScreenState extends State<LoginScreen> {
 
                                   print(body);
                                   if(body['status'] == 'success'){
+
+                                    // สร้าง Object แบบ SharedPreferences
+                                    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+                                    // เก็บค่าที่ต้องการลงในตัวแปรแบบ SharedPreferences
+                                    sharedPreferences.setString('storeID', body['data']['id']);
+                                    sharedPreferences.setString('storeFullname', body['data']['fullname']);
+                                    sharedPreferences.setString('storeUsername', body['data']['username']);
+                                    sharedPreferences.setString('storeImgProfile', body['data']['img_profile']);
+
                                     // ส่งไปหน้า dashboard
                                     Navigator.pushReplacementNamed(context, '/dashboard');
                                   }else{
