@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:nsostock/models/NewsModel.dart';
 import 'package:nsostock/models/UserModel.dart';
 import 'package:nsostock/utils/constants.dart';
 
@@ -46,5 +47,34 @@ class CallAPI {
     }
 
   }
+
+  // สร้างฟังก์ชันในการอ่านข่าวทั้งหมด
+  Future<List<NewsModel>?> getAllNews() async {
+    final response = await http.get(
+      Uri.parse(baseAPIURL+'news'),
+      headers: _setHeaders()
+    );
+    // ignore: unnecessary_null_comparison
+    if(response.body != null){
+      return newsModelFromJson(response.body);
+    }else{
+      return null;
+    }
+  }
+
+  // สร้างฟังก์ชันในการอ่านข่าวล่าสุด
+  Future<List<NewsModel>?> getLastNews() async {
+    final response = await http.get(
+      Uri.parse(baseAPIURL+'lastnews'),
+      headers: _setHeaders()
+    );
+    // ignore: unnecessary_null_comparison
+    if(response.body != null){
+      return newsModelFromJson(response.body);
+    }else{
+      return null;
+    }
+  }
+
 
 }

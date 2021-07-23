@@ -32,6 +32,16 @@ class _AccountScreenState extends State<AccountScreen> {
     });
   }
 
+  // สร้างฟังก์ชันสำหรับ logout
+  logout() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    setState(() {
+      // sharedPreferences!.clear();
+      sharedPreferences!.setInt('storeStep', 2);
+    });
+    Navigator.pushReplacementNamed(context, '/login');
+  }
+
   @override
   void initState() { 
     super.initState();
@@ -108,7 +118,7 @@ class _AccountScreenState extends State<AccountScreen> {
             leading: Icon(Icons.exit_to_app),
             title: Text('ออกจากระบบ'),
             trailing: Icon(Icons.navigate_next),
-            onTap: (){},
+            onTap: logout,
           )
         ],
       ),
