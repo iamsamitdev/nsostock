@@ -91,6 +91,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Scaffold( // fscaff
       appBar: AppBar(
         title: Text('$_title'),
+        actions: [
+          ElevatedButton.icon(
+            onPressed: (){
+              Navigator.pushNamed(context, '/scanqr');
+            }, 
+            icon: Icon(Icons.center_focus_strong_outlined), 
+            label: Text('SCAN'),
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(Color(0xff6200ea))
+            ),
+          )
+        ],
       ),
       body: _children[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(

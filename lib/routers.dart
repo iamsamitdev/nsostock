@@ -7,6 +7,7 @@ import 'package:nsostock/screens/login/login_screen.dart';
 import 'package:nsostock/screens/newsdetail/newsdetail_screen.dart';
 import 'package:nsostock/screens/onboarding/onboarding_screen.dart';
 import 'package:nsostock/screens/register/register_screen.dart';
+import 'package:nsostock/screens/scanqr/scanqr_screen.dart';
 
 // สร้างตัวแปรแบบ Map ไว้เก็บ URL และ Screen
 Map<String, WidgetBuilder> routes = {
@@ -18,4 +19,5 @@ Map<String, WidgetBuilder> routes = {
   "/termpolicy":(BuildContext context) => TermPolicy(),
   "/contact":(BuildContext context) => ContactScreen(),
   "/newsdetail":(BuildContext context) => NewsDetailScreen(),
+  "/scanqr":(BuildContext context) => ScanQRScreen(),
 };
