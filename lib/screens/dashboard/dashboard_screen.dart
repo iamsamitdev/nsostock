@@ -23,6 +23,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   // สร้าง Object แบบ Sharedpreferences
   SharedPreferences? sharedPreferences;
 
+  // สร้างฟังก์ชันสำหรับดึงข้อมูล user
   getProfile() async {
     sharedPreferences = await SharedPreferences.getInstance();
     setState(() {
@@ -30,6 +31,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
       _username = sharedPreferences!.getString('storeUsername');
       _imgProfile = sharedPreferences!.getString('storeImgProfile');
     });
+  }
+
+  // สร้างฟังก์ชันสำหรับ logout
+  logout() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    setState(() {
+      // sharedPreferences!.clear();
+      sharedPreferences!.setInt('storeStep', 2);
+    });
+    Navigator.pushReplacementNamed(context, '/login');
   }
 
   // สร้างตัวแปรไว้เก็บ list รายการของ tab bottomNavigation และ App Bar
@@ -145,9 +156,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ListTile(
               leading: Icon(Icons.exit_to_app),
               title: Text(signout_menu_text),
-              onTap: (){
-                Navigator.pushNamed(context, '/login');
-              },
+              onTap: logout,
             )
           ],
         ),

@@ -1,4 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:nsostock/services/rest_api.dart';
+import 'package:nsostock/utils/utility.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -62,7 +67,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     hintText: 'กรุณาป้อนชื่อ-สกุล',
                                     hintStyle: TextStyle(
                                         fontSize: 16, color: Colors.black),
-                                    errorStyle: TextStyle(fontSize: 16)),
+                                    errorStyle: TextStyle(fontSize: 16)
+                                ),
+                                validator: (value){
+                                  if(value!.isEmpty){
+                                    return 'กรุณาป้อนชื่อ-สกุลก่อน';
+                                  }else{
+                                    return null;
+                                  }
+                                },
+                                onSaved: (value){
+                                  _fullname = value!.trim();
+                                },
                               ),
                               TextFormField(
                                 autofocus: false,
@@ -78,7 +94,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     hintText: 'กรุณาป้อนชื่อผู้ใช้',
                                     hintStyle: TextStyle(
                                         fontSize: 16, color: Colors.black),
-                                    errorStyle: TextStyle(fontSize: 16)),
+                                    errorStyle: TextStyle(fontSize: 16)
+                                ),
+                                validator: (value){
+                                  if(value!.isEmpty){
+                                    return 'กรุณาป้อนชื่อผู้ใช้ก่อน';
+                                  }else{
+                                    return null;
+                                  }
+                                },
+                                onSaved: (value){
+                                  _username = value!.trim();
+                                },
                               ),
                               TextFormField(
                                 autofocus: false,
@@ -95,13 +122,65 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     hintText: 'กรุณาป้อนรหัสผ่าน',
                                     hintStyle: TextStyle(
                                         fontSize: 16, color: Colors.black),
-                                    errorStyle: TextStyle(fontSize: 16)),
+                                    errorStyle: TextStyle(fontSize: 16)
+                                ),
+                                validator: (value){
+                                  if(value!.isEmpty){
+                                    return 'กรุณาป้อนรหัสผ่านก่อน';
+                                  }else{
+                                    return null;
+                                  }
+                                },
+                                onSaved: (value){
+                                  _password = value!.trim();
+                                },
                               ),
                               SizedBox(
                                 height: 24,
                               ),
                               ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () async {
+
+                                  if(formKey.currentState!.validate()){
+                                    formKey.currentState!.save();
+                                    
+                                    // เรียกใช้ registerAPI
+                                    var response = await CallAPI().registerAPI(
+                                      {
+                                        "fullname": _fullname,
+                                        "username": _username,
+                                        "password": _password,
+                                        "img_profile": "noimg.jpg",
+                                        "status":"1"
+                                      }
+                                    );
+
+                                    var body = json.decode(response.body);
+
+                                    if(body['status'] == 'success'){
+
+                                      // สร้าง Object แบบ SharedPreferences
+                                      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+                                      // เก็บค่าที่ต้องการลงในตัวแปรแบบ SharedPreferences
+                                      sharedPreferences.setString('storeID', body['id']);
+                                      sharedPreferences.setString('storeFullname', _fullname!);
+                                      sharedPreferences.setString('storeUsername', _username!);
+                                      sharedPreferences.setString('storeImgProfile', "noimg.jpg");
+
+                                      // เก็บค่า step การ login
+                                      sharedPreferences.setInt('storeStep', 1);
+
+                                      // ส่งไปหน้า dashboard
+                                      Navigator.pushReplacementNamed(context, '/dashboard');
+
+                                    }else{
+                                      Utility().showAlertDialog(context, 'มีข้อผิดพลาด', 'ไม่สามารถลงทะเบียนได้');
+                                    }
+
+                                  }
+
+                                },
                                 child: Padding(
                                   // padding: const EdgeInsets.only(left: 20, right: 20),
                                   padding: const EdgeInsets.symmetric(
