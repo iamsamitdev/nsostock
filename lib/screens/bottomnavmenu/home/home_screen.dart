@@ -99,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
           width: MediaQuery.of(context).size.width * 0.60,
           child: InkWell(
             onTap: (){
-
+              Navigator.pushNamed(context, '/newsdetail', arguments: {'id': newsModel.id});
             },
             child: Card(
               child: Container(
@@ -173,7 +173,7 @@ class _HomeScreenState extends State<HomeScreen> {
               overflow: TextOverflow.ellipsis,
             ),
             onTap: (){
-
+              Navigator.pushNamed(context, '/newsdetail', arguments: {'id': newsModel.id});
             },
           );
         },

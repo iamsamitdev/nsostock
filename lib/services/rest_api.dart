@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:nsostock/models/NewsDetailModel.dart';
 import 'package:nsostock/models/NewsModel.dart';
 import 'package:nsostock/models/UserModel.dart';
 import 'package:nsostock/utils/constants.dart';
@@ -71,6 +72,20 @@ class CallAPI {
     // ignore: unnecessary_null_comparison
     if(response.body != null){
       return newsModelFromJson(response.body);
+    }else{
+      return null;
+    }
+  }
+
+  // ฟังก์ชันอ่านรายละเอียดข่าว
+    Future<NewsDetailModel?> getNewsByID(id) async {
+    final response = await http.get(
+      Uri.parse(baseAPIURL+'news/'+id),
+      headers: _setHeaders()
+    );
+    // ignore: unnecessary_null_comparison
+    if(response.body != null){
+      return newsDetailModelFromJson(response.body);
     }else{
       return null;
     }

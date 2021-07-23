@@ -4,6 +4,7 @@ import 'package:nsostock/screens/drawermenu/about/about_screen.dart';
 import 'package:nsostock/screens/drawermenu/contact/contact_screen.dart';
 import 'package:nsostock/screens/drawermenu/termpolicy/termpolicy_screen.dart';
 import 'package:nsostock/screens/login/login_screen.dart';
+import 'package:nsostock/screens/newsdetail/newsdetail_screen.dart';
 import 'package:nsostock/screens/onboarding/onboarding_screen.dart';
 import 'package:nsostock/screens/register/register_screen.dart';
 
@@ -16,4 +17,5 @@ Map<String, WidgetBuilder> routes = {
   "/about":(BuildContext context) => AboutScreen(),
   "/termpolicy":(BuildContext context) => TermPolicy(),
   "/contact":(BuildContext context) => ContactScreen(),
+  "/newsdetail":(BuildContext context) => NewsDetailScreen(),
 };
